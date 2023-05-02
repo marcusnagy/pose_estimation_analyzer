@@ -63,7 +63,6 @@ def plot_std_bell_curves(df_pose: pd.DataFrame, df_std: pd.DataFrame, limits_tra
         max_value = max(max(sublist) for sublist in limits_translation)
         min_value = min(min(sublist) for sublist in limits_translation)
         plt.xlim((min_value, max_value))
-    plt.ylim((0, num_data_points))
     plt.title('Bell Curves for Translation Components')
     plt.legend()
     plt.show()
