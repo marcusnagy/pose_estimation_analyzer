@@ -1,11 +1,12 @@
 # If you think this file is ugly as hell
 # Well, yes. Cause it is a sketch!
 
-from matplotlib.axes import Axes
-import numpy as np
-import pandas
+import argparse
 
 import matplotlib.pyplot as plot
+import numpy as np
+import pandas
+from matplotlib.axes import Axes
 
 
 class Dataset:
@@ -15,22 +16,6 @@ class Dataset:
     def __init__(self, label, data) -> None:
         self.label = label
         self.data = data
-
-
-data = pandas.read_csv(
-    "pick_times_2023-05-09_skiros:Product-160.csv",
-    index_col=0
-)
-
-pick = np.array(data["lookout"]) - np.array(data["start"])
-pick = [x for x in pick if x > 0]
-place = np.array(data["finished"]) - np.array(data["lookout"])
-place = [x for x in place if x > 0]
-
-datasets = [
-    Dataset("Pick", pick),
-    Dataset("Place", place)
-]
 
 
 def plot_steps_to(index: int, axes: Axes, dataset: Dataset):
@@ -47,34 +32,56 @@ def plot_steps_to(index: int, axes: Axes, dataset: Dataset):
     axes.set_title(title)
 
 
-fig, axes = plot.subplots(1, 2, sharey=True)
-fig.set_figwidth(8)  # in inches
-fig.set_figheight(5)  # in inches
-for i, ds in enumerate(datasets):
-    plot_steps_to(i, axes[i], ds)
-fig.savefig("pick_times_steps.png")
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        "plot_pick_times"
+    )
+    parser.add_argument('-f', '--file', type=str)
+    args = parser.parse_args()
 
-plot.clf()  # clear
+    data = pandas.read_csv(
+        args.file,
+        index_col=0
+    )
 
-plot.boxplot([ds.data for ds in datasets])
-plot.xticks(
-    ticks=range(1, len(datasets) + 1),
-    labels=[ds.label for ds in datasets]
-)
-plot.xlabel("Skill")
-plot.ylabel("Time, seconds")
-plot.savefig("pick_times_box.png")
+    pick = np.array(data["lookout"]) - np.array(data["start"])
+    pick = [x for x in pick if x > 0]
+    place = np.array(data["finished"]) - np.array(data["lookout"])
+    place = [x for x in place if x > 0]
 
-plot.clf()  # clear
+    datasets = [
+        Dataset("Pick", pick),
+        Dataset("Place", place)
+    ]
 
-plot.hist(
-    [ds.data for ds in datasets],
-    stacked=True,
-    align='mid',
-    label=[ds.label for ds in datasets],
-    bins=20
-)
-plot.legend()
-plot.xlabel("Time, seconds")
-plot.ylabel("Count of successful runs")
-plot.savefig("pick_times_hist.png")
+    fig, axes = plot.subplots(1, 2, sharey=True)
+    fig.set_figwidth(8)  # in inches
+    fig.set_figheight(5)  # in inches
+    for i, ds in enumerate(datasets):
+        plot_steps_to(i, axes[i], ds)
+    fig.savefig("pick_times_steps.png")
+
+    plot.clf()  # clear
+
+    plot.boxplot([ds.data for ds in datasets])
+    plot.xticks(
+        ticks=range(1, len(datasets) + 1),
+        labels=[ds.label for ds in datasets]
+    )
+    plot.xlabel("Skill")
+    plot.ylabel("Time, seconds")
+    plot.savefig("pick_times_box.png")
+
+    plot.clf()  # clear
+
+    plot.hist(
+        [ds.data for ds in datasets],
+        stacked=True,
+        align='mid',
+        label=[ds.label for ds in datasets],
+        bins=20
+    )
+    plot.legend()
+    plot.xlabel("Time, seconds")
+    plot.ylabel("Count of successful runs")
+    plot.savefig("pick_times_hist.png")
