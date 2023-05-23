@@ -1,0 +1,46 @@
+min: 13.0
+max: 47.0
+
+input:
+  -
+    base: "~/Documents/LTH_Exjobb"
+    files:
+      -
+        label: "Juice, lying"
+        file: "pick_juice_lying.0deg.csv"
+      -
+        label: "Juice, standing"
+        file: "pick_juice_vertical.csv"
+      -
+        label: "Stout, test"
+        file: "pick_stout_test.csv"
+      -
+        label: "Tall, standing"
+        file: "pick_tall.csv"
+        adjust: True
+      -
+        label: "Tall, lying 0 degrees"
+        file: "pick_tall_lying.csv"
+        adjust: True
+      -
+        label: "Tall, lying 90 degrees"
+        file: "pick_tall_lying.90.csv"
+        adjust: True
+      -
+        label: "Tall, lying 180 degrees"
+        file: "pick_tall_lying.180.csv"
+        adjust: True
+      -
+        label: "Tall, bottom left"
+        file: "pick_tall_lying.bottom_left.csv"
+      -
+        label: "Tall, bottom right"
+        file: "pick_tall_lying.bottom_right.csv"
+      -
+        label: "Tall, top left"
+        file: "pick_tall_lying.top_left.csv"
+      -
+        label: "Tall, top right"
+        file: "pick_tall_lying.top_right.csv"
+
+output: "./output"
